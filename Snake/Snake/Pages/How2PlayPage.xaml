@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="Snake.Pages.How2PlayPage">
+    <ContentPage.Content>
+        <StackLayout Margin="25">
+            <Label Text="How to Play" FontSize = "25" TextDecorations="Underline" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" />
+
+            <Label Text="Aim One Player: Get as long as possible to get the highest score."    
+                   LineBreakMode="WordWrap"
+                   VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" />
+
+            <Label Text="Aim Two Player: Stay alive longer then your opponent."    
+                   LineBreakMode="WordWrap"
+                   VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" />
+
+            <Image Source="Demo.png" />
+
+            <Label Text="Use the arrow keys to direct your snake around. Avoid bumping your head against walls, yourself or other snakes(two player)."    
+                   LineBreakMode="WordWrap"
+                   VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" />
+
+            <Image Source="Fruit.png" />
+
+            <Label Text="Eat fruit to increase your length. Chilies will increase your speed temporarily, so be careful!"    
+                   LineBreakMode="WordWrap"
+                   VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
