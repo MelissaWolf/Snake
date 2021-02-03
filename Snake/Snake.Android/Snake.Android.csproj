@@ -91,7 +91,9 @@
     <AndroidResource Include="Resources\mipmap-xxxhdpi\icon.png" />
     <AndroidResource Include="Resources\mipmap-xxxhdpi\launcher_foreground.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\GameOver.png" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Snake\Snake.csproj">
       <Project>{77876DB2-6DD6-4528-851A-6AC2453B62D4}</Project>
@@ -132,7 +134,7 @@
     <AndroidResource Include="Resources\drawable\Cherry.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\Chillie.png" />
+    <AndroidResource Include="Resources\drawable\Chili.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\Grapes.png" />

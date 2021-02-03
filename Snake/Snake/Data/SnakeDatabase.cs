@@ -37,16 +37,16 @@ namespace Snake.Data
                             .Where(i => i.UserID == id)
                             .FirstOrDefaultAsync();
         }
+        //Checking Users Exist
+        public async Task<bool> CheckUsers()
+        => await _database.Table<UserModel>().CountAsync() != 0 ? true : false;
         //Getting ENDS
 
-
-
-
-
-
-        // save player in to the DB
+        //Adding
+        //Save User in DB
         public Task<int> SaveUserAsync(UserModel user)
         {
+
             if (user.UserID != 0)
             {
                 return _database.UpdateAsync(user);
@@ -55,6 +55,7 @@ namespace Snake.Data
             {
                 return _database.InsertAsync(user);
             }
+
         }
 
 

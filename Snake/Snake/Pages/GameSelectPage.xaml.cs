@@ -12,7 +12,7 @@ namespace Snake.Pages
     public partial class GameSelectPage : ContentPage
     {
 
-        Label PlyrLbl;
+        readonly Label PlyrLbl;
         int PlyrNum = 1;
 
         public GameSelectPage()
@@ -76,6 +76,7 @@ namespace Snake.Pages
         {
             //Pushing GameMode to GamePage
             await Navigation.PushAsync(new GamePage(PlyrNum, "Round"));
+            Navigation.RemovePage(this);
         }
     }
 }

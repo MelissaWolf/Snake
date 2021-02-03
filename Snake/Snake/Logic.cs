@@ -16,6 +16,9 @@ namespace Snake.Pages
 
         int HeadLoc = 0;
 
+        //Single Player only
+        int ChiliNum = 0;
+
         //Snake2 Direction (Two Plyr)
         public char LastSnake2Dir = 'L';
         public char Snake2Dir = 'L';
@@ -146,12 +149,10 @@ namespace Snake.Pages
             if (SnakeNum == 1) //Snake 1
             {
                 LastSnakeDir = ThisLastSnakeDir;
-                SnakeDir = ThisSnakeDir;
             }
             else //Snake 2
             {
                 LastSnake2Dir = ThisLastSnakeDir;
-                Snake2Dir = ThisSnakeDir;
             }
 
             //Making a portal or 'round' map
@@ -186,6 +187,11 @@ namespace Snake.Pages
                     //If Fruit Was a Chilie
                     if (TheGrid[(headY * gridX) + headX].HotChili == true)
                     {
+                        if (SnakeNum == 1) //Snake 1
+                        {
+                            ChiliNum++;
+                        }
+
                         //Removes Chili Effect
                         TheGrid[(headY * gridX) + headX].HotChili = false;
 
@@ -323,7 +329,7 @@ namespace Snake.Pages
 
 
         //Snake Game Logic 1Plyr
-        public async void GameOn1Plyr(Block[] TheGrid, Label ScoreLbl)
+        public async void GameOn1Plyr(Block[] TheGrid, Label ScoreLbl, BoxView Box, Image GameOverImg, Button[] EndGameMenuBtns, Label[] EndGameMenuTitles, Label[] EndGameMenuResults)
         {
             //Length starts at 0
             int CurrLength = 0;
@@ -387,13 +393,40 @@ namespace Snake.Pages
                 //Displaying new Score
                 ScoreLbl.Text = "Score: " + (CurrLength * 5);
             }
+            ScoreLbl.Text = "";
             //Moving Snake while Alive ENDS
 
+            //Gives Users a Chance to See Result
+            await Task.Delay(1000);
+
+            //Showing GameOver Box
+            Box.IsVisible = true;
+            GameOverImg.IsVisible = true;
+            EndGameMenuResults[0].Text = (CurrLength + 5) + "m";
+            EndGameMenuResults[1].Text = Convert.ToString(CurrLength);
+            EndGameMenuResults[2].Text = Convert.ToString(ChiliNum);
+            EndGameMenuResults[3].Text = Convert.ToString(CurrLength * 5);
+
+            //Making Visible
+            for (int i = 0; i < EndGameMenuBtns.Length; i++) {
+                EndGameMenuBtns[i].IsVisible = true;
+            }
+
+            for (int i = 0; i < EndGameMenuTitles.Length; i++)
+            {
+                EndGameMenuTitles[i].IsVisible = true;
+            }
+
+            for (int i = 0; i < EndGameMenuResults.Length; i++)
+            {
+                EndGameMenuResults[i].IsVisible = true;
+            }
+            //Showing GameOver Box ENDS
         }
         //Function GameOn1Plyr ENDS
 
         //Snake Game Logic 2Plyr
-        public async void GameOn2Plyr(Block[] TheGrid, Label plyr1ScoreLbl, Label plyr2ScoreLbl)
+        public async void GameOn2Plyr(Block[] TheGrid, Label plyr1ResultLbl, Label plyr2ResultLbl, BoxView Box, Image GameOverImg, Button[] EndGameMenuBtns)
         {
             //Snake 1 -----
             //Updates Direction for 2plyr
@@ -490,24 +523,37 @@ namespace Snake.Pages
             //Checking in Case of a Tie
             if (Check4Tie(HeadLoc, HeadLoc2) == true)
             {
-                plyr1ScoreLbl.Text = plyr2ScoreLbl.Text = "Tie";
+                plyr1ResultLbl.Text = plyr2ResultLbl.Text = "Tie";
             } //Snake Wins
             else if (SnakeAlive == true)
             {
-                plyr1ScoreLbl.Text = "Win";
-                plyr1ScoreLbl.TextColor = Color.ForestGreen;
+                plyr1ResultLbl.Text = "Win";
+                plyr1ResultLbl.TextColor = Color.ForestGreen;
 
-                plyr2ScoreLbl.Text = "Lose";
-                plyr2ScoreLbl.TextColor = Color.DarkRed;
+                plyr2ResultLbl.Text = "Lose";
+                plyr2ResultLbl.TextColor = Color.DarkRed;
             } //Snake2 Wins
             else
             {
-                plyr1ScoreLbl.Text = "Lose";
-                plyr1ScoreLbl.TextColor = Color.DarkRed;
+                plyr1ResultLbl.Text = "Lose";
+                plyr1ResultLbl.TextColor = Color.DarkRed;
 
-                plyr2ScoreLbl.Text = "Win";
-                plyr2ScoreLbl.TextColor = Color.ForestGreen;
+                plyr2ResultLbl.Text = "Win";
+                plyr2ResultLbl.TextColor = Color.ForestGreen;
             }
+
+            //Gives Users a Chance to See Result
+            await Task.Delay(1000);
+
+            //Showing GameOver Box
+            Box.IsVisible = true;
+            GameOverImg.IsVisible = true;
+
+            for (int i = 0; i < EndGameMenuBtns.Length; i++)
+            {
+                EndGameMenuBtns[i].IsVisible = true;
+            }
+            //Showing GameOver Box ENDS
         }
         //Function GameOn2Plyr ENDS
 
@@ -543,7 +589,7 @@ namespace Snake.Pages
                 }
 
                 //Random Chance for fruit once in a while
-                if (luck.Next(0, 5) == 0 && TheGrid[((randomY) * gridX) + randomX].SafeBlock == true && FruitCount < 5 && FruitCoolDown == 0)
+                if (luck.Next(0, 5) == 0 && TheGrid[((randomY) * gridX) + randomX].SafeBlock == true && TheGrid[((randomY) * gridX) + randomX].HasFruit == false && FruitCount < 5 && FruitCoolDown == 0)
                 {
                     int randFruit = luck.Next(0, 9);
 

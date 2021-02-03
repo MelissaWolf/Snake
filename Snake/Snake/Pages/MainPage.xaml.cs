@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Snake.Models;
 using Snake.Pages;
 using Xamarin.Forms;
 
@@ -27,7 +28,7 @@ namespace Snake
                 FontSize = 25,
                 BackgroundColor = Color.ForestGreen
             };
-
+            ProfileBtn.Clicked += Nav2ProfilPage;
 
             //Play Game Btn
             Button PlayBtn = new Button
@@ -47,7 +48,6 @@ namespace Snake
             };
             How2PlayBtn.Clicked += Nav2How2PlayPage;
 
-
             //High Scores
             Button HSBtn = new Button
             {
@@ -55,6 +55,7 @@ namespace Snake
                 FontSize = 25,
                 BackgroundColor = Color.ForestGreen
             };
+
 
             Content = new StackLayout
             {
@@ -69,6 +70,13 @@ namespace Snake
                     HSBtn
                 }
             };
+
+            //Checking4Users();
+        }
+
+        public async void Nav2ProfilPage(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ProfilePage());
         }
 
         public async void Nav2GameSelPage(object sender, EventArgs e)
@@ -79,6 +87,47 @@ namespace Snake
         public async void Nav2How2PlayPage(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new How2PlayPage());
+        }
+
+        //Refreshes the Page
+        public void Go2ProfilePage()
+        {
+            //Refreshes Current Page
+            Navigation.PushAsync(new ProfilePage());
+            Navigation.RemovePage(this);
+        }
+
+        //Adding Users if there is no User Data
+        public async void AddUsers()
+        {
+            //Creates 4 Users there will only ever be 4 User Slots
+            for (int i = 1; i < 5; i++)
+            {
+                //Adds Default Users to DB
+                await App.Database.SaveUserAsync(new UserModel
+                {
+                    UserID = 0,
+                    UserName = "Player" + i,
+                    ChiliesEaten = 0,
+                    FruitEaten = 0,
+                    Active = false
+                });
+
+            } // end of the loop
+
+            Go2ProfilePage();
+        }
+
+        //Checking for Existence of Users
+        public async void Checking4Users()
+        {
+            bool UsersState = await App.Database.CheckUsers();
+
+            //If Users dont Exist
+            if (UsersState == true)
+            {
+                AddUsers();
+            }
         }
     }
 }

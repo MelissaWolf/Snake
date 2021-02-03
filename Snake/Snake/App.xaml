@@ -6,6 +6,11 @@
              mc:Ignorable="d"
              x:Class="Snake.App">
     <Application.Resources>
-
+        <ResourceDictionary>
+            <Style TargetType="NavigationPage">
+                <Setter Property="BarBackgroundColor" Value="ForestGreen" />
+                <Setter Property="BarTextColor" Value="Black" />
+            </Style>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

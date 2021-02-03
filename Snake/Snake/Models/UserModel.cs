@@ -14,6 +14,9 @@ namespace Snake.Models
         public string UserName { get; set; } //UserName
         public int ChiliesEaten { get; set; } //Number of Chlies Eaten
         public int FruitEaten { get; set; } //Number of Fruit Eaten
+        public bool Active { get; set; } //Selects the Currently Used User
+
+        public string SnakeActive { get; set; } //Selects the Currently Used User Snake Skin
 
         public event PropertyChangedEventHandler PropertyChanged; //Helps with Binding Context with this Model
 

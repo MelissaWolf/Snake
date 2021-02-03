@@ -13,7 +13,7 @@ namespace Snake.Pages
     public partial class GamePage : ContentPage
     {
 
-        Logic Logic;
+        readonly Logic Logic;
 
         public GamePage(int Plyrs, string Map)
         {
@@ -34,6 +34,7 @@ namespace Snake.Pages
             { //Single Plyr
                 Logic.gridY = 25;
 
+                #region 1plyr Grid Definitions
                 Grid = new Grid
                 {
                     RowDefinitions =
@@ -74,6 +75,7 @@ namespace Snake.Pages
                         new RowDefinition { Height = new GridLength(66) }
                     }
                 };
+                #endregion
 
                 //Defining Grid Size
                 GridStartPoint = 0;
@@ -84,6 +86,7 @@ namespace Snake.Pages
             {  //Two Plyr
                 Logic.gridY = 15;
 
+                #region 2plyr Grid Definitions
                 Grid = new Grid
                 {
                     RowDefinitions =
@@ -122,6 +125,7 @@ namespace Snake.Pages
                         new RowDefinition { Height = new GridLength(66) }
                     }
                 };
+                #endregion
 
                 //Defining Grid Size
                 GridStartPoint = 4;
@@ -215,6 +219,7 @@ namespace Snake.Pages
             }
             //Snake Map ENDS
 
+            #region Arrow Keys Plyr1
             //Game Buttons
             Button UpBtn = new Button
             {
@@ -265,6 +270,7 @@ namespace Snake.Pages
             Grid.Children.Add(LeftBtn);
             Grid.Children.Add(RightBtn);
             Grid.Children.Add(DownBtn);
+            #endregion
 
             //Starting Game
             Logic.PlaceFruit(TheGrid);
@@ -285,30 +291,252 @@ namespace Snake.Pages
                 Grid.Children.Add(ScoreLbl);
                 //Game Score ENDS
 
+                #region Result Box
+                //Result Box
+                BoxView Box = new BoxView
+                {
+                    BackgroundColor = Color.LightGray,
+                    Opacity = 0.8,
+                    CornerRadius = 10,
+                    IsVisible = false
+                };
+                Grid.SetRow(Box, 2);
+                Grid.SetRowSpan(Box, 21);
+                Grid.SetColumn(Box, 2);
+                Grid.SetColumnSpan(Box, 21);
+
+                Grid.Children.Add(Box);
+                //Game Over Image
+                Image GameOverImg = new Image
+                {
+                    Source = "GameOver.png",
+                    Aspect = Aspect.AspectFill,
+                    IsVisible = false
+                };
+                Grid.SetRow(GameOverImg, 1);
+                Grid.SetRowSpan(GameOverImg, 8);
+                Grid.SetColumn(GameOverImg, 3);
+                Grid.SetColumnSpan(GameOverImg, 19);
+
+                Grid.Children.Add(GameOverImg);
+
+                #region Game Results Titles
+                //Total Length Lbl
+                Label LengthLbl = new Label
+                {
+                    Text = "Final Length:",
+                    TextColor = Color.Black,
+                    FontSize = 18,
+                    FontAttributes = FontAttributes.Bold,
+                    VerticalTextAlignment = TextAlignment.Center,
+                    HorizontalTextAlignment = TextAlignment.Start,
+                    IsVisible = false
+                };
+                Grid.SetRow(LengthLbl, 8);
+                Grid.SetRowSpan(LengthLbl, 2);
+                Grid.SetColumn(LengthLbl, 3);
+                Grid.SetColumnSpan(LengthLbl, 15);
+
+                Grid.Children.Add(LengthLbl);
+                //Total Fruit Lbl
+                Label FruitLbl = new Label
+                {
+                    Text = "Total Fruit Eaten:",
+                    TextColor = Color.Black,
+                    FontSize = 18,
+                    FontAttributes = FontAttributes.Bold,
+                    VerticalTextAlignment = TextAlignment.Center,
+                    HorizontalTextAlignment = TextAlignment.Start,
+                    IsVisible = false
+                };
+                Grid.SetRow(FruitLbl, 10);
+                Grid.SetRowSpan(FruitLbl, 2);
+                Grid.SetColumn(FruitLbl, 3);
+                Grid.SetColumnSpan(FruitLbl, 15);
+
+                Grid.Children.Add(FruitLbl);
+                //Total Chilies Lbl
+                Label ChiliLbl = new Label
+                {
+                    Text = "Total Chilies Eaten:",
+                    TextColor = Color.Black,
+                    FontSize = 18,
+                    FontAttributes = FontAttributes.Bold,
+                    VerticalTextAlignment = TextAlignment.Center,
+                    HorizontalTextAlignment = TextAlignment.Start,
+                    IsVisible = false
+                };
+                Grid.SetRow(ChiliLbl, 12);
+                Grid.SetRowSpan(ChiliLbl, 2);
+                Grid.SetColumn(ChiliLbl, 3);
+                Grid.SetColumnSpan(ChiliLbl, 15);
+
+                Grid.Children.Add(ChiliLbl);
+                //Final Score Lbl
+                Label FinalScoreLbl = new Label
+                {
+                    Text = "Final Score:",
+                    TextColor = Color.Black,
+                    FontSize = 18,
+                    FontAttributes = FontAttributes.Bold,
+                    VerticalTextAlignment = TextAlignment.Center,
+                    HorizontalTextAlignment = TextAlignment.Start,
+                    IsVisible = false
+                };
+                Grid.SetRow(FinalScoreLbl, 14);
+                Grid.SetRowSpan(FinalScoreLbl, 2);
+                Grid.SetColumn(FinalScoreLbl, 3);
+                Grid.SetColumnSpan(FinalScoreLbl, 15);
+
+                Grid.Children.Add(FinalScoreLbl);
+
+                Label[] EndGameMenuTitles = new Label[4];
+                EndGameMenuTitles[0] = LengthLbl;
+                EndGameMenuTitles[1] = FruitLbl;
+                EndGameMenuTitles[2] = ChiliLbl;
+                EndGameMenuTitles[3] = FinalScoreLbl;
+                #endregion
+                #region Results Stats
+                //Shows Total Length
+                Label LengthNumLbl = new Label
+                {
+                    Text = "",
+                    TextColor = Color.Black,
+                    FontSize = 18,
+                    FontAttributes = FontAttributes.Bold,
+                    VerticalTextAlignment = TextAlignment.Center,
+                    HorizontalTextAlignment = TextAlignment.End,
+                    IsVisible = false
+                };
+                Grid.SetRow(LengthNumLbl, 8);
+                Grid.SetRowSpan(LengthNumLbl, 2);
+                Grid.SetColumn(LengthNumLbl, 17);
+                Grid.SetColumnSpan(LengthNumLbl, 5);
+
+                Grid.Children.Add(LengthNumLbl);
+                //Shows Total Fruit
+                Label FruitNumLbl = new Label
+                {
+                    Text = "",
+                    TextColor = Color.Black,
+                    FontSize = 18,
+                    FontAttributes = FontAttributes.Bold,
+                    VerticalTextAlignment = TextAlignment.Center,
+                    HorizontalTextAlignment = TextAlignment.End,
+                    IsVisible = false
+                };
+                Grid.SetRow(FruitNumLbl, 10);
+                Grid.SetRowSpan(FruitNumLbl, 2);
+                Grid.SetColumn(FruitNumLbl, 17);
+                Grid.SetColumnSpan(FruitNumLbl, 5);
+
+                Grid.Children.Add(FruitNumLbl);
+                //Shows Total Chilies
+                Label ChiliNumLbl = new Label
+                {
+                    Text = "",
+                    TextColor = Color.Black,
+                    FontSize = 18,
+                    FontAttributes = FontAttributes.Bold,
+                    VerticalTextAlignment = TextAlignment.Center,
+                    HorizontalTextAlignment = TextAlignment.End,
+                    IsVisible = false
+                };
+                Grid.SetRow(ChiliNumLbl, 12);
+                Grid.SetRowSpan(ChiliNumLbl, 2);
+                Grid.SetColumn(ChiliNumLbl, 17);
+                Grid.SetColumnSpan(ChiliNumLbl, 5);
+
+                Grid.Children.Add(ChiliNumLbl);
+                //Shows Total Chilies
+                Label FinalScoreNumLbl = new Label
+                {
+                    Text = "",
+                    TextColor = Color.Black,
+                    FontSize = 18,
+                    FontAttributes = FontAttributes.Bold,
+                    VerticalTextAlignment = TextAlignment.Center,
+                    HorizontalTextAlignment = TextAlignment.End,
+                    IsVisible = false
+                };
+                Grid.SetRow(FinalScoreNumLbl, 14);
+                Grid.SetRowSpan(FinalScoreNumLbl, 2);
+                Grid.SetColumn(FinalScoreNumLbl, 17);
+                Grid.SetColumnSpan(FinalScoreNumLbl, 5);
+
+                Grid.Children.Add(FinalScoreNumLbl);
+
+                Label[] EndGameMenuResults = new Label[4];
+                EndGameMenuResults[0] = LengthNumLbl;
+                EndGameMenuResults[1] = FruitNumLbl;
+                EndGameMenuResults[2] = ChiliNumLbl;
+                EndGameMenuResults[3] = FinalScoreNumLbl;
+                #endregion
+                //Menu Button
+                Button MenuBtn = new Button
+                {
+                    Text = "Menu",
+                    TextColor = Color.Black,
+                    FontAttributes = FontAttributes.Bold,
+                    BackgroundColor = Color.ForestGreen,
+                    CornerRadius = 10,
+                    IsVisible = false
+                };
+                Grid.SetRow(MenuBtn, 17);
+                Grid.SetRowSpan(MenuBtn, 5);
+                Grid.SetColumn(MenuBtn, 3);
+                Grid.SetColumnSpan(MenuBtn, 8);
+                MenuBtn.Clicked += Back2Menu;
+
+                Grid.Children.Add(MenuBtn);
+                //Rematch Button
+                Button PlayAgainBtn = new Button
+                {
+                    Text = "Play Again",
+                    TextColor = Color.LimeGreen,
+                    FontAttributes = FontAttributes.Bold,
+                    BackgroundColor = Color.Black,
+                    CornerRadius = 10,
+                    IsVisible = false
+                };
+                Grid.SetRow(PlayAgainBtn, 17);
+                Grid.SetRowSpan(PlayAgainBtn, 5);
+                Grid.SetColumn(PlayAgainBtn, 14);
+                Grid.SetColumnSpan(PlayAgainBtn, 8);
+                PlayAgainBtn.Clicked += PlayAgain;
+
+                Grid.Children.Add(PlayAgainBtn);
+
+                Button[] EndGameMenuBtns = new Button[2];
+                EndGameMenuBtns[0] = MenuBtn;
+                EndGameMenuBtns[1] = PlayAgainBtn;
+                //Result Box ENDS
+                #endregion
+
                 Content = Grid;
 
                 //Starts Game
-                Logic.GameOn1Plyr(TheGrid, ScoreLbl);
+                Logic.GameOn1Plyr(TheGrid, ScoreLbl, Box, GameOverImg, EndGameMenuBtns, EndGameMenuTitles, EndGameMenuResults);
             }
             else //Two Plyr
             {
-                //Game Score
-                Label ScoreLbl = new Label
+                //Game Result
+                Label ResultLbl = new Label
                 {
                     Text = "",
                     HorizontalTextAlignment = TextAlignment.Center,
                     FontAttributes = FontAttributes.Bold,
                     FontSize = 25
                 };
-                Grid.SetRow(ScoreLbl, 19);
-                Grid.SetColumn(ScoreLbl, 7);
-                Grid.SetColumnSpan(ScoreLbl, 11);
+                Grid.SetRow(ResultLbl, 19);
+                Grid.SetColumn(ResultLbl, 7);
+                Grid.SetColumnSpan(ResultLbl, 11);
 
-                Grid.Children.Add(ScoreLbl);
-                //Game Score ENDS
+                Grid.Children.Add(ResultLbl);
+                //Game Result ENDS
 
-                //Game Score2
-                Label ScoreLbl2 = new Label
+                //Game Result2
+                Label ResultLbl2 = new Label
                 {
                     Text = "",
                     HorizontalTextAlignment = TextAlignment.Center,
@@ -316,20 +544,103 @@ namespace Snake.Pages
                     FontSize = 25,
                     Rotation = 180
                 };
-                Grid.SetRow(ScoreLbl2, 3);
-                Grid.SetColumn(ScoreLbl2, 7);
-                Grid.SetColumnSpan(ScoreLbl2, 11);
+                Grid.SetRow(ResultLbl2, 3);
+                Grid.SetColumn(ResultLbl2, 7);
+                Grid.SetColumnSpan(ResultLbl2, 11);
 
-                Grid.Children.Add(ScoreLbl2);
-                //Game Score2 ENDS
+                Grid.Children.Add(ResultLbl2);
+                //Game Result2 ENDS
 
-                ScoreLbl.Text = "";
+                #region Result Box
+                //Result Box
+                BoxView Box = new BoxView
+                {
+                    BackgroundColor = Color.LightGray,
+                    Opacity = 0.8,
+                    CornerRadius = 10,
+                    IsVisible = false
+                };
+                Grid.SetRow(Box, 4);
+                Grid.SetRowSpan(Box, 15);
+                Grid.SetColumn(Box, 2);
+                Grid.SetColumnSpan(Box, 21);
+
+                Grid.Children.Add(Box);
+                //Game Over Image
+                Image GameOverImg = new Image
+                {
+                    Source = "GameOver.png",
+                    Aspect = Aspect.AspectFill,
+                    IsVisible = false
+                };
+                Grid.SetRow(GameOverImg, 4);
+                Grid.SetRowSpan(GameOverImg, 8);
+                Grid.SetColumn(GameOverImg, 3);
+                Grid.SetColumnSpan(GameOverImg, 19);
+
+                Grid.Children.Add(GameOverImg);
+                //Menu Button
+                Button MenuBtn = new Button
+                {
+                    Text = "Menu",
+                    TextColor = Color.Black,
+                    FontAttributes = FontAttributes.Bold,
+                    BackgroundColor = Color.ForestGreen,
+                    CornerRadius = 10,
+                    IsVisible = false
+                };
+                Grid.SetRow(MenuBtn, 13);
+                Grid.SetRowSpan(MenuBtn, 5);
+                Grid.SetColumn(MenuBtn, 3);
+                Grid.SetColumnSpan(MenuBtn, 8);
+                MenuBtn.Clicked += Back2Menu;
+
+                Grid.Children.Add(MenuBtn);
+                //Rematch Button
+                Button RematchBtn = new Button
+                {
+                    Text = "Rematch",
+                    TextColor = Color.LimeGreen,
+                    FontAttributes = FontAttributes.Bold,
+                    BackgroundColor = Color.Black,
+                    CornerRadius = 10,
+                    IsVisible = false
+                };
+                Grid.SetRow(RematchBtn, 13);
+                Grid.SetRowSpan(RematchBtn, 5);
+                Grid.SetColumn(RematchBtn, 14);
+                Grid.SetColumnSpan(RematchBtn, 8);
+                RematchBtn.Clicked += PlayAgain;
+
+                Grid.Children.Add(RematchBtn);
+
+                Button[] EndGameMenuBtns = new Button[2];
+                EndGameMenuBtns[0] = MenuBtn;
+                EndGameMenuBtns[1] = RematchBtn;
+                //Result Box ENDS
+                #endregion
 
                 Content = Grid;
 
                 //Starts Game
-                Logic.GameOn2Plyr(TheGrid, ScoreLbl, ScoreLbl2);
+                Logic.GameOn2Plyr(TheGrid, ResultLbl, ResultLbl2, Box, GameOverImg, EndGameMenuBtns);
             }
+
+            //Game Btns
+            void Back2Menu(object sender, EventArgs e)
+            {
+                //Refreshes Current Page
+                Navigation.PushAsync(new MainPage());
+                Navigation.RemovePage(this);
+            }
+
+            void PlayAgain(object sender, EventArgs e)
+            {
+                //Refreshes Current Page
+                Navigation.PushAsync(new GamePage(Plyrs, Map));
+                Navigation.RemovePage(this);
+            }
+            //Game Btns ENDS
         }
 
         //Snake Diection Btns
