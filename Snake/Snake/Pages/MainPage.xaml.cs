@@ -8,10 +8,8 @@ using Snake.Models;
 using Snake.Pages;
 using Xamarin.Forms;
 
-namespace Snake
+namespace Snake.Pages
 {
-    // Learn more about making custom code visible in the Xamarin.Forms previewer
-    // by visiting https://aka.ms/xamarinforms-previewer
     [DesignTimeVisible(false)]
     public partial class MainPage : ContentPage
     {
@@ -55,6 +53,7 @@ namespace Snake
                 FontSize = 25,
                 BackgroundColor = Color.ForestGreen
             };
+            HSBtn.Clicked += Nav2HSPage;
 
 
             Content = new StackLayout
@@ -71,7 +70,7 @@ namespace Snake
                 }
             };
 
-            //Checking4Users();
+            Checking4Users();
         }
 
         public async void Nav2ProfilPage(object sender, EventArgs e)
@@ -89,44 +88,193 @@ namespace Snake
             await Navigation.PushAsync(new How2PlayPage());
         }
 
+        public async void Nav2HSPage(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new HighScorePage("All"));
+        }
+
         //Refreshes the Page
         public void Go2ProfilePage()
         {
             //Refreshes Current Page
             Navigation.PushAsync(new ProfilePage());
-            Navigation.RemovePage(this);
         }
 
         //Adding Users if there is no User Data
-        public async void AddUsers()
+        public async Task AddUsers()
         {
             //Creates 4 Users there will only ever be 4 User Slots
-            for (int i = 1; i < 5; i++)
+            await App.Database.SaveUserAsync(new UserModel
+            {
+                UserID = 0,
+                UserName = "Save1",
+                FruitEaten = 0,
+                ChiliesEaten = 0,
+                Active = 1,
+                SnakeActive = ""
+            });
+
+            for (int i = 2; i < 5; i++)
             {
                 //Adds Default Users to DB
                 await App.Database.SaveUserAsync(new UserModel
                 {
                     UserID = 0,
-                    UserName = "Player" + i,
-                    ChiliesEaten = 0,
+                    UserName = "Save" + i,
                     FruitEaten = 0,
-                    Active = false
+                    ChiliesEaten = 0,
+                    Active = 0,
+                    SnakeActive = ""
                 });
 
-            } // end of the loop
+            } //End of User Loop
+        }
 
-            Go2ProfilePage();
+        //Adding Maps if there is no User Data
+        public async Task AddMaps()
+        {
+            #region No Walls Map
+            //No Walls Map
+            await App.Database.SaveMapInfoAsync(new MapModel
+            {
+                MapID = 0,
+                MapName = ("No Walls")
+            });
+
+            for (int i = 0; i < 25; i++)
+            {
+                //Adds Map Rows to DB
+                await App.Database.SaveMapRowAsync(new MapRowModel
+                {
+                    MapRowID = 0,
+                    RowNum = i,
+                    BlockType1 = "E",
+                    BlockType2 = "E",
+                    BlockType3 = "E",
+                    BlockType4 = "E",
+                    BlockType5 = "E",
+                    BlockType6 = "E",
+                    BlockType7 = "E",
+                    BlockType8 = "E",
+                    BlockType9 = "E",
+                    BlockType10 = "E",
+                    BlockType11 = "E",
+                    BlockType12 = "E",
+                    BlockType13 = "E",
+                    BlockType14 = "E",
+                    BlockType15 = "E",
+                    BlockType16 = "E",
+                    BlockType17 = "E",
+                    BlockType18 = "E",
+                    BlockType19 = "E",
+                    BlockType20 = "E",
+                    BlockType21 = "E",
+                    BlockType22 = "E",
+                    BlockType23 = "E",
+                    BlockType24 = "E",
+                    BlockType25 = "E",
+                    MapID = 1
+                });
+
+            } //End of MapRow Loop
+              //No Walls Map ENDS
+            #endregion
+
+            #region Boxed In Map
+            //Boxed In Map
+            await App.Database.SaveMapInfoAsync(new MapModel
+            {
+                MapID = 0,
+                MapName = "Boxed In"
+            });
+
+            for (int i = 0; i < 25; i++)
+            {
+                if (i == 0 || i == 24)
+                {
+                    //Adds Map Rows to DB
+                    await App.Database.SaveMapRowAsync(new MapRowModel
+                    {
+                        MapRowID = 0,
+                        RowNum = i,
+                        BlockType1 = "S",
+                        BlockType2 = "S",
+                        BlockType3 = "S",
+                        BlockType4 = "S",
+                        BlockType5 = "S",
+                        BlockType6 = "S",
+                        BlockType7 = "S",
+                        BlockType8 = "S",
+                        BlockType9 = "S",
+                        BlockType10 = "S",
+                        BlockType11 = "S",
+                        BlockType12 = "S",
+                        BlockType13 = "S",
+                        BlockType14 = "S",
+                        BlockType15 = "S",
+                        BlockType16 = "S",
+                        BlockType17 = "S",
+                        BlockType18 = "S",
+                        BlockType19 = "S",
+                        BlockType20 = "S",
+                        BlockType21 = "S",
+                        BlockType22 = "S",
+                        BlockType23 = "S",
+                        BlockType24 = "S",
+                        BlockType25 = "S",
+                        MapID = 2
+                    });
+                }
+                else
+                {
+                    //Adds Map Rows to DB
+                    await App.Database.SaveMapRowAsync(new MapRowModel
+                    {
+                        MapRowID = 0,
+                        RowNum = i,
+                        BlockType1 = "S",
+                        BlockType2 = "E",
+                        BlockType3 = "E",
+                        BlockType4 = "E",
+                        BlockType5 = "E",
+                        BlockType6 = "E",
+                        BlockType7 = "E",
+                        BlockType8 = "E",
+                        BlockType9 = "E",
+                        BlockType10 = "E",
+                        BlockType11 = "E",
+                        BlockType12 = "E",
+                        BlockType13 = "E",
+                        BlockType14 = "E",
+                        BlockType15 = "E",
+                        BlockType16 = "E",
+                        BlockType17 = "E",
+                        BlockType18 = "E",
+                        BlockType19 = "E",
+                        BlockType20 = "E",
+                        BlockType21 = "E",
+                        BlockType22 = "E",
+                        BlockType23 = "E",
+                        BlockType24 = "E",
+                        BlockType25 = "S",
+                        MapID = 2
+                    });
+                }
+            } //End of MapRow Loop
+              //Boxed In Map ENDS
+            #endregion
         }
 
         //Checking for Existence of Users
         public async void Checking4Users()
         {
-            bool UsersState = await App.Database.CheckUsers();
-
             //If Users dont Exist
-            if (UsersState == true)
+            if (await App.Database.CheckUsers() == false)
             {
-                AddUsers();
+                await AddUsers();
+                await AddMaps();
+
+                Go2ProfilePage();
             }
         }
     }

@@ -35,7 +35,7 @@ namespace Snake.Pages
                 HorizontalOptions = LayoutOptions.Center,
             };
 
-            //Round Map
+            //No Walls Map
             Button NoWallsMapBtn = new Button
             {
                 Text = "No Walls",
@@ -43,6 +43,15 @@ namespace Snake.Pages
                 BackgroundColor = Color.ForestGreen
             };
             NoWallsMapBtn.Clicked += Nav2GamePage;
+
+            //Boxed In Map
+            Button BoxedInMapBtn = new Button
+            {
+                Text = "Boxed In",
+                FontSize = 25,
+                BackgroundColor = Color.ForestGreen
+            };
+            BoxedInMapBtn.Clicked += Nav2GamePage;
 
             Content = new StackLayout
             {
@@ -53,7 +62,8 @@ namespace Snake.Pages
                     PlyrSwitcher,
                     PlyrLbl,
                     new BoxView { BackgroundColor = Color.Transparent },
-                    NoWallsMapBtn
+                    NoWallsMapBtn,
+                    BoxedInMapBtn
                 }
             };
         }
@@ -74,8 +84,10 @@ namespace Snake.Pages
 
         public async void Nav2GamePage(object sender, EventArgs e)
         {
+            Button btn = (Button)sender;
+
             //Pushing GameMode to GamePage
-            await Navigation.PushAsync(new GamePage(PlyrNum, "Round"));
+            await Navigation.PushAsync(new GamePage(PlyrNum, btn.Text));
             Navigation.RemovePage(this);
         }
     }

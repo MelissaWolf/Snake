@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Snake.Models;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -198,7 +198,6 @@ namespace Snake.Pages
             //Making Snake Map
             for (int r = GridStartPoint; r < GridEndPoint; r++)
             {
-
                 //The Columns
                 for (int c = 0; c < 25; c++)
                 {
@@ -212,6 +211,8 @@ namespace Snake.Pages
                         BackgroundColor = Color.LightGreen,
                         Margin = 0
                     }, c, r);
+
+                    //Defines if
                     TheGrid[GridPointIndex] = new Block(true, false, false, Img);
 
                     GridPointIndex++;
@@ -466,11 +467,29 @@ namespace Snake.Pages
 
                 Grid.Children.Add(FinalScoreNumLbl);
 
-                Label[] EndGameMenuResults = new Label[4];
+                //Shows Possible HighScore
+                Label HSLbl = new Label
+                {
+                    Text = "New High Score!",
+                    TextColor = Color.ForestGreen,
+                    FontSize = 12,
+                    FontAttributes = FontAttributes.Bold,
+                    VerticalTextAlignment = TextAlignment.Center,
+                    HorizontalTextAlignment = TextAlignment.Center,
+                    IsVisible = false
+                };
+                Grid.SetRow(HSLbl, 16);
+                Grid.SetColumn(HSLbl, 9);
+                Grid.SetColumnSpan(HSLbl, 7);
+
+                Grid.Children.Add(HSLbl);
+
+                Label[] EndGameMenuResults = new Label[5];
                 EndGameMenuResults[0] = LengthNumLbl;
                 EndGameMenuResults[1] = FruitNumLbl;
                 EndGameMenuResults[2] = ChiliNumLbl;
                 EndGameMenuResults[3] = FinalScoreNumLbl;
+                EndGameMenuResults[4] = HSLbl;
                 #endregion
                 //Menu Button
                 Button MenuBtn = new Button
@@ -516,7 +535,7 @@ namespace Snake.Pages
                 Content = Grid;
 
                 //Starts Game
-                Logic.GameOn1Plyr(TheGrid, ScoreLbl, Box, GameOverImg, EndGameMenuBtns, EndGameMenuTitles, EndGameMenuResults);
+                Logic.GameOn1Plyr(Map, TheGrid, ScoreLbl, Box, GameOverImg, EndGameMenuBtns, EndGameMenuTitles, EndGameMenuResults);
             }
             else //Two Plyr
             {

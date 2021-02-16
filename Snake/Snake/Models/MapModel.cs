@@ -13,8 +13,6 @@ namespace Snake.Models
         public int MapID { get; set; } //ID Primary Key
         public string MapName { get; set; } //Map's Name
 
-        public event PropertyChangedEventHandler PropertyChanged; //Helps with Binding Context with this Model
-
 
         //Linking to UserScoresModel
         [OneToMany(CascadeOperations = CascadeOperation.CascadeRead)]

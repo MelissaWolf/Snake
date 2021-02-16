@@ -8,15 +8,15 @@ namespace Snake
 {
     public partial class App : Application
     {
-        static SnakeDatabase database;
+        static SnakeDB database;
 
-        public static SnakeDatabase Database
+        public static SnakeDB Database
         {
             get
             {
                 if (database == null)
                 {
-                    database = new SnakeDatabase(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Contacts.db3"));
+                    database = new SnakeDB(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SnakeDB.db3"));
                 }
                 return database;
             }
@@ -26,7 +26,7 @@ namespace Snake
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new MainPage());
+            MainPage = new NavigationPage(new Pages.MainPage());
         }
 
         protected override void OnStart()

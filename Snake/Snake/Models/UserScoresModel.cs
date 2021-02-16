@@ -13,8 +13,6 @@ namespace Snake.Models
         public int ScoreID { get; set; } //ID Primary Key
         public int Score { get; set; } //The Best Score of the Map
 
-        public event PropertyChangedEventHandler PropertyChanged; //Helps with Binding Context with this Model
-
 
         //Foreign Key from User Model
         [OneToMany(CascadeOperations = CascadeOperation.CascadeRead)]
@@ -23,6 +21,8 @@ namespace Snake.Models
         [ForeignKey(typeof(UserModel))]
         public int UserID { get; set; }
 
+        [ForeignKey(typeof(UserModel))]
+        public string UserName { get; set; }
 
         //Foreign Key from Map Model
         [OneToMany(CascadeOperations = CascadeOperation.CascadeRead)]

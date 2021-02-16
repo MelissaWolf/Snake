@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Snake.Models;
 using Xamarin.Forms;
 
 namespace Snake.Pages
@@ -329,7 +330,7 @@ namespace Snake.Pages
 
 
         //Snake Game Logic 1Plyr
-        public async void GameOn1Plyr(Block[] TheGrid, Label ScoreLbl, BoxView Box, Image GameOverImg, Button[] EndGameMenuBtns, Label[] EndGameMenuTitles, Label[] EndGameMenuResults)
+        public async void GameOn1Plyr(string MapName, Block[] TheGrid, Label ScoreLbl, BoxView Box, Image GameOverImg, Button[] EndGameMenuBtns, Label[] EndGameMenuTitles, Label[] EndGameMenuResults)
         {
             //Length starts at 0
             int CurrLength = 0;
@@ -408,7 +409,8 @@ namespace Snake.Pages
             EndGameMenuResults[3].Text = Convert.ToString(CurrLength * 5);
 
             //Making Visible
-            for (int i = 0; i < EndGameMenuBtns.Length; i++) {
+            for (int i = 0; i < EndGameMenuBtns.Length; i++)
+            {
                 EndGameMenuBtns[i].IsVisible = true;
             }
 
@@ -417,11 +419,60 @@ namespace Snake.Pages
                 EndGameMenuTitles[i].IsVisible = true;
             }
 
-            for (int i = 0; i < EndGameMenuResults.Length; i++)
+            for (int i = 0; i < EndGameMenuResults.Length - 1; i++)
             {
                 EndGameMenuResults[i].IsVisible = true;
             }
             //Showing GameOver Box ENDS
+
+            //Adds Stats to DB
+            //Adds/Updates Map High Score
+            MapModel ThisMap = await App.Database.GetMapByNameAsync(MapName);
+            UserModel MyUser = await App.Database.GetActiveUserAsync();
+
+            if (await App.Database.CheckUserMapHS(MyUser.UserID, ThisMap.MapID) == true)
+            {
+                UserScoresModel MyCurrHScore = await App.Database.GetBestHighScoreByUserMapAsync(MyUser.UserID, ThisMap.MapID);
+
+                //Only Updates Score if New Score is Better
+                if (MyCurrHScore.Score < (CurrLength * 5)) {
+                    await App.Database.SaveHighScoreAsync(new UserScoresModel
+                    {
+                        ScoreID = MyCurrHScore.ScoreID,
+                        Score = (CurrLength * 5),
+                        MapID = ThisMap.MapID,
+                        UserID = MyUser.UserID,
+                        UserName = MyUser.UserName
+                    });
+
+                    EndGameMenuResults[4].IsVisible = true;
+                }
+            }
+            //No Previous Score in DB
+            else
+            {
+                await App.Database.SaveHighScoreAsync(new UserScoresModel
+                {
+                    ScoreID = 0,
+                    Score = CurrLength * 5,
+                    MapID = ThisMap.MapID,
+                    UserID = MyUser.UserID,
+                    UserName = MyUser.UserName
+                });
+
+                EndGameMenuResults[4].IsVisible = true;
+            }
+
+            //Updates User
+            await App.Database.SaveUserAsync(new UserModel
+            {
+                UserID = MyUser.UserID,
+                UserName = MyUser.UserName,
+                FruitEaten = (MyUser.FruitEaten + CurrLength),
+                ChiliesEaten = (MyUser.ChiliesEaten + ChiliNum),
+                Active = 1,
+                SnakeActive = ""
+            });
         }
         //Function GameOn1Plyr ENDS
 
