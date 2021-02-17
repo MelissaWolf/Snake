@@ -129,11 +129,11 @@ namespace Snake.Data
             return _database.Table<MapRowModel>().ToListAsync();
         }
         //Getting Map Rows
-        public Task<List<MapRowModel>> GetMapRowsByIdAsync(int id, int r)
+        public Task<MapRowModel> GetMapRowsByIdAsync(int id, int r)
         {
             return _database.Table<MapRowModel>()
                             .Where(i => (i.MapID == id) && (i.RowNum == r))
-                            .ToListAsync();
+                            .FirstOrDefaultAsync();
         }
         //Getting ENDS
 

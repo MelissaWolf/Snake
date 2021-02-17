@@ -12,11 +12,14 @@ namespace Snake.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class HighScorePage : ContentPage
     {
+        readonly Logic Logic;
         ListView HSListView;
 
         public HighScorePage(string MapName)
         {
             InitializeComponent();
+
+            Logic = new Logic();
 
             StackLayout MainstackLayout = new StackLayout();
 
@@ -58,6 +61,10 @@ namespace Snake.Pages
                     //Changes Map Parameter
                     string MapSelected = (string)picker.ItemsSource[selectedIndex];
 
+                    if (MapSelected != "All") {
+                        MapSelected = Convert.ToString(await Logic.GetMapID(MapSelected));
+                    }
+
                     Navigation.PushAsync(new HighScorePage(MapSelected));
                     Navigation.RemovePage(this);
                 } //Changing HS Map ENDS
@@ -92,12 +99,9 @@ namespace Snake.Pages
             }
             else
             { //Shows Map HS
-                MapModel ThisMap = await App.Database.GetMapByNameAsync(MapName);
-                int ThisMapID = ThisMap.MapID;
-
                 HSListView = new ListView
                 {
-                    ItemsSource = App.Database.GetHighScoresByMapAsync(ThisMapID).Result,
+                    ItemsSource = App.Database.GetHighScoresByMapAsync(Convert.ToInt32(MapName)).Result,
                     Margin = new Thickness(15, 0, 15, 0),
                     SelectionMode = (ListViewSelectionMode)SelectionMode.None
                 };

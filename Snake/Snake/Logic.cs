@@ -35,8 +35,28 @@ namespace Snake.Pages
         //Total Fruit on the Board
         int FruitCount = 0;
 
+        //Is Game Active
         bool GameActive = true;
 
+
+        //Gets MapID
+        public async Task<int> GetMapID(string ThisMapName)
+        {
+            MapModel ThisMap = await App.Database.GetMapByNameAsync(ThisMapName);
+
+            return ThisMap.MapID;
+        }
+
+
+        //Map Types
+        //No Walls
+
+        //No Walls ENDS
+
+        //Boxed In
+
+        //Boxed In ENDS
+        //Map Types ENDS
 
         //Making a portal or 'round' map
         public int CheckYnX(int thisY, int thisX, out int newX)
@@ -427,20 +447,22 @@ namespace Snake.Pages
 
             //Adds Stats to DB
             //Adds/Updates Map High Score
-            MapModel ThisMap = await App.Database.GetMapByNameAsync(MapName);
+
+            int MapID = await GetMapID(MapName);
             UserModel MyUser = await App.Database.GetActiveUserAsync();
 
-            if (await App.Database.CheckUserMapHS(MyUser.UserID, ThisMap.MapID) == true)
+            if (await App.Database.CheckUserMapHS(MyUser.UserID, MapID) == true)
             {
-                UserScoresModel MyCurrHScore = await App.Database.GetBestHighScoreByUserMapAsync(MyUser.UserID, ThisMap.MapID);
+                UserScoresModel MyCurrHScore = await App.Database.GetBestHighScoreByUserMapAsync(MyUser.UserID, MapID);
 
                 //Only Updates Score if New Score is Better
-                if (MyCurrHScore.Score < (CurrLength * 5)) {
+                if (MyCurrHScore.Score < (CurrLength * 5))
+                {
                     await App.Database.SaveHighScoreAsync(new UserScoresModel
                     {
                         ScoreID = MyCurrHScore.ScoreID,
                         Score = (CurrLength * 5),
-                        MapID = ThisMap.MapID,
+                        MapID = MapID,
                         UserID = MyUser.UserID,
                         UserName = MyUser.UserName
                     });
@@ -455,7 +477,7 @@ namespace Snake.Pages
                 {
                     ScoreID = 0,
                     Score = CurrLength * 5,
-                    MapID = ThisMap.MapID,
+                    MapID = MapID,
                     UserID = MyUser.UserID,
                     UserName = MyUser.UserName
                 });
