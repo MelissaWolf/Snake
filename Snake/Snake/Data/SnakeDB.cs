@@ -20,7 +20,6 @@ namespace Snake.Data
             _database.CreateTableAsync<UserModel>().Wait();
             _database.CreateTableAsync<UserScoresModel>().Wait();
             _database.CreateTableAsync<MapModel>().Wait();
-            _database.CreateTableAsync<MapRowModel>().Wait();
         }
 
         //Getting
@@ -122,19 +121,6 @@ namespace Snake.Data
                             .Where(i => i.MapName == n)
                             .FirstOrDefaultAsync();
         }
-
-        //Getting Map Rows
-        public Task<List<MapRowModel>> GetMapRowsAsync()
-        {
-            return _database.Table<MapRowModel>().ToListAsync();
-        }
-        //Getting Map Rows
-        public Task<MapRowModel> GetMapRowsByIdAsync(int id, int r)
-        {
-            return _database.Table<MapRowModel>()
-                            .Where(i => (i.MapID == id) && (i.RowNum == r))
-                            .FirstOrDefaultAsync();
-        }
         //Getting ENDS
 
         //Adding
@@ -161,18 +147,6 @@ namespace Snake.Data
             else
             {
                 return _database.InsertAsync(mapID);
-            }
-        }
-        //Save Map Row in DB
-        public Task<int> SaveMapRowAsync(MapRowModel mapRowID)
-        {
-            if (mapRowID.MapRowID != 0)
-            {
-                return _database.UpdateAsync(mapRowID);
-            }
-            else
-            {
-                return _database.InsertAsync(mapRowID);
             }
         }
 

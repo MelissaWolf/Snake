@@ -9,6 +9,9 @@ namespace Snake.Pages
 {
     class Logic
     {
+        //The Grid
+        public Block[] TheGrid;
+
         //Snake Direction
         public char LastSnakeDir = 'U';
         public char SnakeDir = 'U';
@@ -39,6 +42,7 @@ namespace Snake.Pages
         bool GameActive = true;
 
 
+
         //Gets MapID
         public async Task<int> GetMapID(string ThisMapName)
         {
@@ -47,16 +51,112 @@ namespace Snake.Pages
             return ThisMap.MapID;
         }
 
+        #region Make Blocks
+        #region Empty
+        //Makes Empty Block
+        public async Task MakeEmptyBlock(Grid Grid, Image Img, int c, int r, int GridPointIndex)
+        {
+            Grid.Children.Add(new BoxView
+            {
+                BackgroundColor = Color.LightGreen,
+                Margin = 0
+            }, c, r);
+            Grid.Children.Add(Img = new Image
+            {
+                BackgroundColor = Color.LightGreen,
+                Margin = 0
+            }, c, r);
 
+            TheGrid[GridPointIndex] = new Block(true, false, false, Img);
+        }
+        //Makes Empty Block ENDS
+        #endregion
+
+        #region Wall
+        //Makes Wall Block
+        public async Task MakeWallBlock(Grid Grid, Image Img, int c, int r, int GridPointIndex)
+        {
+            Grid.Children.Add(new BoxView
+            {
+                BackgroundColor = Color.DarkGray,
+                Margin = 0
+            }, c, r);
+            Grid.Children.Add(Img = new Image
+            {
+                BackgroundColor = Color.DarkGray,
+                Margin = 0
+            }, c, r);
+
+            TheGrid[GridPointIndex] = new Block(false, false, false, Img);
+            TheGrid[GridPointIndex].Img.Source = "Wall.png";
+        }
+        //Makes Wall Block ENDS
+        #endregion
+        #endregion
+
+        #region Make Maps
         //Map Types
+        #region No Walls
         //No Walls
-
+        public async Task MakeNoWallMap(int GridStartPoint, int GridEndPoint, int GridPointIndex, Image Img, Grid Grid)
+        {
+            for (int r = GridStartPoint; r < GridEndPoint; r++)
+            {
+                //The Columns
+                for (int c = 0; c < 25; c++)
+                {
+                    await MakeEmptyBlock(Grid, Img, c, r, GridPointIndex);
+                    GridPointIndex++;
+                }
+            } //Map is Made
+        }
         //No Walls ENDS
+        #endregion
 
+        #region Boxed In
         //Boxed In
+        public async Task MakeBoxedInMap(int GridStartPoint, int GridEndPoint, int GridPointIndex, Image Img, Grid Grid)
+        {
+            //The Columns
+            //Top Row
+            for (int c = 0; c < 25; c++)
+            {
+                await MakeWallBlock(Grid, Img, c, GridStartPoint, GridPointIndex);
+                GridPointIndex++;
+            }
+            //Top Row ENDS
 
+            //Middle Rows
+            for (int r = GridStartPoint + 1; r < GridEndPoint - 1; r++)
+            {
+                await MakeWallBlock(Grid, Img, 0, r, GridPointIndex);
+                GridPointIndex++;
+
+                //The Columns
+                for (int c = 1; c < 24; c++)
+                {
+                    await MakeEmptyBlock(Grid, Img, c, r, GridPointIndex);
+                    GridPointIndex++;
+                }
+
+                await MakeWallBlock(Grid, Img, 24, r, GridPointIndex);
+                GridPointIndex++;
+            }
+            //Middle Rows ENDS
+
+            //Bottom Row
+            for (int c = 0; c < 25; c++)
+            {
+                await MakeWallBlock(Grid, Img, c, GridEndPoint - 1, GridPointIndex);
+
+                GridPointIndex++;
+            }
+            //Bottom Row ENDS
+        }
         //Boxed In ENDS
+        #endregion
         //Map Types ENDS
+        #endregion
 
         //Making a portal or 'round' map
         public int CheckYnX(int thisY, int thisX, out int newX)
@@ -131,7 +231,7 @@ namespace Snake.Pages
 
 
         //Controls Movement of Snakes
-        public async Task<Tuple<int, int, string, int, int, int, int>> MoveSnake(Block[] TheGrid, int SnakeNum,
+        public async Task<Tuple<int, int, string, int, int, int, int>> MoveSnake(int SnakeNum,
                                     int headY, int headX, string tailDir, int tailY, int tailX, int CurrLength, int ChiliCoolDown)
         {
             int lastHeadY = headY;
@@ -317,14 +417,14 @@ namespace Snake.Pages
         } //Function MoveSnake ENDS
 
         //Allows 2Plyr Snake to Move
-        public async Task Moving2Plyrs(Block[] TheGrid, int SnakeNum,
+        public async Task Moving2Plyrs(int SnakeNum,
                                     int headY, int headX, string tailDir, int tailY, int tailX, int CurrLength, int ChiliCoolDown)
         {
             //Moving Snake while Snakes are Alive
             while (GameActive == true)
             {
                 //Moving Snake1
-                var Snake1Info = await MoveSnake(TheGrid, SnakeNum,
+                var Snake1Info = await MoveSnake(SnakeNum,
                                                  headY, headX, tailDir, tailY, tailX, CurrLength, ChiliCoolDown);
 
                 //Updating data Snake 1
@@ -350,7 +450,7 @@ namespace Snake.Pages
 
 
         //Snake Game Logic 1Plyr
-        public async void GameOn1Plyr(string MapName, Block[] TheGrid, Label ScoreLbl, BoxView Box, Image GameOverImg, Button[] EndGameMenuBtns, Label[] EndGameMenuTitles, Label[] EndGameMenuResults)
+        public async void GameOn1Plyr(string MapName, Label ScoreLbl, BoxView Box, Image GameOverImg, Button[] EndGameMenuBtns, Label[] EndGameMenuTitles, Label[] EndGameMenuResults)
         {
             //Length starts at 0
             int CurrLength = 0;
@@ -399,8 +499,7 @@ namespace Snake.Pages
             while (SnakeAlive == true && GameActive == true)
             {
                 //Moving Snake
-                var Snake1Info = await MoveSnake(TheGrid, 1,
-                                                 headY, headX, tailDir, tailY, tailX, CurrLength, ChiliCoolDown);
+                var Snake1Info = await MoveSnake(1, headY, headX, tailDir, tailY, tailX, CurrLength, ChiliCoolDown);
 
                 //Updating data
                 headY = Snake1Info.Item1;
@@ -499,7 +598,7 @@ namespace Snake.Pages
         //Function GameOn1Plyr ENDS
 
         //Snake Game Logic 2Plyr
-        public async void GameOn2Plyr(Block[] TheGrid, Label plyr1ResultLbl, Label plyr2ResultLbl, BoxView Box, Image GameOverImg, Button[] EndGameMenuBtns)
+        public async void GameOn2Plyr(Label plyr1ResultLbl, Label plyr2ResultLbl, BoxView Box, Image GameOverImg, Button[] EndGameMenuBtns)
         {
             //Snake 1 -----
             //Updates Direction for 2plyr
@@ -584,10 +683,8 @@ namespace Snake.Pages
             //Gives Users a Chance to Get Ready
             await Task.Delay(3000);
 
-            Task plyr1Moving = this.Moving2Plyrs(TheGrid, 1,
-                                                     headY, headX, tailDir, tailY, tailX, 0, 0);
-            Task plyr2Moving = this.Moving2Plyrs(TheGrid, 2,
-                                                     headY2, headX2, tailDir2, tailY2, tailX2, 0, 0);
+            Task plyr1Moving = this.Moving2Plyrs(1, headY, headX, tailDir, tailY, tailX, 0, 0);
+            Task plyr2Moving = this.Moving2Plyrs(2, headY2, headX2, tailDir2, tailY2, tailX2, 0, 0);
 
             await Task.WhenAll(plyr1Moving, plyr2Moving);
 
@@ -631,7 +728,7 @@ namespace Snake.Pages
         //Function GameOn2Plyr ENDS
 
 
-        public async void PlaceFruit(Block[] TheGrid)
+        public async void PlaceFruit()
         {
             Random luck = new Random();
 

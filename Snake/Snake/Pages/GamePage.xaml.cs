@@ -20,19 +20,8 @@ namespace Snake.Pages
 
         //Grid
         Grid Grid;
-        Block[] TheGrid;
         int GridStartPoint;
         int GridEndPoint;
-
-        //Result Box Items
-        Label ScoreLbl;
-        BoxView Box;
-        Image GameOverImg;
-        Button[] EndGameMenuBtns;
-        Label[] EndGameMenuTitles;
-        Label[] EndGameMenuResults;
-        Label ResultLbl;
-        Label ResultLbl2;
 
         public GamePage(int Plyrs, string Map)
         {
@@ -197,7 +186,7 @@ namespace Snake.Pages
             Logic.gridX = 25;
 
             //Array for Grid
-            TheGrid = new Block[Logic.gridY * Logic.gridX];
+            Logic.TheGrid = new Block[Logic.gridY * Logic.gridX];
             int GridPointIndex = 0;
 
             NavigationPage.SetHasNavigationBar(this, false);
@@ -207,7 +196,7 @@ namespace Snake.Pages
             Grid.ColumnSpacing = 0;
 
             //Making Snake Map
-            MakeMap(Plyrs, Map, GridPointIndex);
+            MakeMap(Map, GridPointIndex);
             //Snake Map ENDS
 
             #region Arrow Keys Plyr1
@@ -262,6 +251,9 @@ namespace Snake.Pages
             Grid.Children.Add(RightBtn);
             Grid.Children.Add(DownBtn);
             #endregion
+
+            //Starting Game
+            Logic.PlaceFruit();
 
             if (Plyrs == 1) //Single Plyr
             {
@@ -520,6 +512,9 @@ namespace Snake.Pages
                 #endregion
 
                 Content = Grid;
+
+                //Starts Game
+                Logic.GameOn1Plyr(Map, ScoreLbl, Box, GameOverImg, EndGameMenuBtns, EndGameMenuTitles, EndGameMenuResults);
             }
             else //Two Plyr
             {
@@ -624,6 +619,9 @@ namespace Snake.Pages
                 #endregion
 
                 Content = Grid;
+
+                //Starts Game
+                Logic.GameOn2Plyr(ResultLbl, ResultLbl2, Box, GameOverImg, EndGameMenuBtns);
             }
 
             //Game Btns
@@ -644,85 +642,17 @@ namespace Snake.Pages
         }
 
         //Makes Map
-        public async Task MakeMap(int Plyrs, string Map, int GridPointIndex)
+        public async Task MakeMap(string Map, int GridPointIndex)
         {
-                //Gets Map Column Data
-                int MapID = await Logic.GetMapID(Map);
-
-            for (int r = GridStartPoint; r < GridEndPoint; r++)
+            if (Map == "No Walls")
             {
-                MapRowModel ThisRow = await App.Database.GetMapRowsByIdAsync(MapID, r);
-
-                string[] ColumnType = new string[25];
-
-                //Storing Column Block Types to Array
-                ColumnType[0] = ThisRow.BlockType1;
-                ColumnType[1] = ThisRow.BlockType2;
-                ColumnType[2] = ThisRow.BlockType3;
-                ColumnType[3] = ThisRow.BlockType4;
-                ColumnType[4] = ThisRow.BlockType5;
-                ColumnType[5] = ThisRow.BlockType6;
-                ColumnType[6] = ThisRow.BlockType7;
-                ColumnType[7] = ThisRow.BlockType8;
-                ColumnType[8] = ThisRow.BlockType9;
-                ColumnType[9] = ThisRow.BlockType10;
-                ColumnType[10] = ThisRow.BlockType11;
-                ColumnType[11] = ThisRow.BlockType12;
-                ColumnType[12] = ThisRow.BlockType13;
-                ColumnType[13] = ThisRow.BlockType14;
-                ColumnType[14] = ThisRow.BlockType15;
-                ColumnType[15] = ThisRow.BlockType16;
-                ColumnType[16] = ThisRow.BlockType17;
-                ColumnType[17] = ThisRow.BlockType18;
-                ColumnType[18] = ThisRow.BlockType19;
-                ColumnType[19] = ThisRow.BlockType20;
-                ColumnType[20] = ThisRow.BlockType21;
-                ColumnType[21] = ThisRow.BlockType22;
-                ColumnType[22] = ThisRow.BlockType23;
-                ColumnType[23] = ThisRow.BlockType24;
-                ColumnType[24] = ThisRow.BlockType25;
-
-                //The Columns
-                for (int c = 0; c < 25; c++)
-                {
-                    Grid.Children.Add(new BoxView
-                    {
-                        BackgroundColor = Color.LightGreen,
-                        Margin = 0
-                    }, c, r);
-                    Grid.Children.Add(Img = new Image
-                    {
-                        BackgroundColor = Color.LightGreen,
-                        Margin = 0
-                    }, c, r);
-
-                    //Checks Gets Appropriate Data
-
-                    //If Block is NOT a Wall
-                    if (ColumnType[c] == "E")
-                    {
-                        TheGrid[GridPointIndex] = new Block(true, false, false, Img);
-                    }
-                    else
-                    { //Block is a Wall
-                        TheGrid[GridPointIndex] = new Block(false, false, false, Img);
-                        TheGrid[GridPointIndex].Img.Source = "Wall.png";
-                    }
-
-                    GridPointIndex++;
-                }
-            } //Map is Made
-
-            //Start Game
-          //  Logic.PlaceFruit(TheGrid);
-            if (Plyrs == 1) //Single Plyr
-            {
-                Logic.GameOn1Plyr(Map, TheGrid, ScoreLbl, Box, GameOverImg, EndGameMenuBtns, EndGameMenuTitles, EndGameMenuResults);
+                await Logic.MakeNoWallMap(GridStartPoint, GridEndPoint, GridPointIndex, Img, Grid);
             }
-            else
-            {
-                Logic.GameOn2Plyr(TheGrid, ResultLbl, ResultLbl2, Box, GameOverImg, EndGameMenuBtns);
+            else {
+                await Logic.MakeBoxedInMap(GridStartPoint, GridEndPoint, GridPointIndex, Img, Grid);
             }
+
+
         } //Makes Map ENDS
 
         //Snake Diection Btns

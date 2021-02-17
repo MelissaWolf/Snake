@@ -17,10 +17,5 @@ namespace Snake.Models
         //Linking to UserScoresModel
         [OneToMany(CascadeOperations = CascadeOperation.CascadeRead)]
         public UserScoresModel ChildUserScore { get; set; }
-
-
-        //Linking to MapRowModel
-        [OneToMany(CascadeOperations = CascadeOperation.CascadeRead)]
-        public MapRowModel ChildMapRow { get; set; }
     }
 }

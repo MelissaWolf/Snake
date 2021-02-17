@@ -140,44 +140,7 @@ namespace Snake.Pages
                 MapID = 0,
                 MapName = ("No Walls")
             });
-
-            for (int i = 0; i < 25; i++)
-            {
-                //Adds Map Rows to DB
-                await App.Database.SaveMapRowAsync(new MapRowModel
-                {
-                    MapRowID = 0,
-                    RowNum = i,
-                    BlockType1 = "E",
-                    BlockType2 = "E",
-                    BlockType3 = "E",
-                    BlockType4 = "E",
-                    BlockType5 = "E",
-                    BlockType6 = "E",
-                    BlockType7 = "E",
-                    BlockType8 = "E",
-                    BlockType9 = "E",
-                    BlockType10 = "E",
-                    BlockType11 = "E",
-                    BlockType12 = "E",
-                    BlockType13 = "E",
-                    BlockType14 = "E",
-                    BlockType15 = "E",
-                    BlockType16 = "E",
-                    BlockType17 = "E",
-                    BlockType18 = "E",
-                    BlockType19 = "E",
-                    BlockType20 = "E",
-                    BlockType21 = "E",
-                    BlockType22 = "E",
-                    BlockType23 = "E",
-                    BlockType24 = "E",
-                    BlockType25 = "E",
-                    MapID = 1
-                });
-
-            } //End of MapRow Loop
-              //No Walls Map ENDS
+            //No Walls Map ENDS
             #endregion
 
             #region Boxed In Map
@@ -187,81 +150,7 @@ namespace Snake.Pages
                 MapID = 0,
                 MapName = "Boxed In"
             });
-
-            for (int i = 0; i < 25; i++)
-            {
-                if (i == 0 || i == 24)
-                {
-                    //Adds Map Rows to DB
-                    await App.Database.SaveMapRowAsync(new MapRowModel
-                    {
-                        MapRowID = 0,
-                        RowNum = i,
-                        BlockType1 = "S",
-                        BlockType2 = "S",
-                        BlockType3 = "S",
-                        BlockType4 = "S",
-                        BlockType5 = "S",
-                        BlockType6 = "S",
-                        BlockType7 = "S",
-                        BlockType8 = "S",
-                        BlockType9 = "S",
-                        BlockType10 = "S",
-                        BlockType11 = "S",
-                        BlockType12 = "S",
-                        BlockType13 = "S",
-                        BlockType14 = "S",
-                        BlockType15 = "S",
-                        BlockType16 = "S",
-                        BlockType17 = "S",
-                        BlockType18 = "S",
-                        BlockType19 = "S",
-                        BlockType20 = "S",
-                        BlockType21 = "S",
-                        BlockType22 = "S",
-                        BlockType23 = "S",
-                        BlockType24 = "S",
-                        BlockType25 = "S",
-                        MapID = 2
-                    });
-                }
-                else
-                {
-                    //Adds Map Rows to DB
-                    await App.Database.SaveMapRowAsync(new MapRowModel
-                    {
-                        MapRowID = 0,
-                        RowNum = i,
-                        BlockType1 = "S",
-                        BlockType2 = "E",
-                        BlockType3 = "E",
-                        BlockType4 = "E",
-                        BlockType5 = "E",
-                        BlockType6 = "E",
-                        BlockType7 = "E",
-                        BlockType8 = "E",
-                        BlockType9 = "E",
-                        BlockType10 = "E",
-                        BlockType11 = "E",
-                        BlockType12 = "E",
-                        BlockType13 = "E",
-                        BlockType14 = "E",
-                        BlockType15 = "E",
-                        BlockType16 = "E",
-                        BlockType17 = "E",
-                        BlockType18 = "E",
-                        BlockType19 = "E",
-                        BlockType20 = "E",
-                        BlockType21 = "E",
-                        BlockType22 = "E",
-                        BlockType23 = "E",
-                        BlockType24 = "E",
-                        BlockType25 = "S",
-                        MapID = 2
-                    });
-                }
-            } //End of MapRow Loop
-              //Boxed In Map ENDS
+            //Boxed In Map ENDS
             #endregion
         }
 
