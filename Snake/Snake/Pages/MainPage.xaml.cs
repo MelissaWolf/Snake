@@ -20,6 +20,16 @@ namespace Snake.Pages
             NavigationPage.SetHasNavigationBar(this, false);
 
             //Profile Btn
+            Label ActiveUserLbl = new Label
+            {
+                Text = "Welcome",
+                FontSize = 25,
+                TextColor = Color.Lime,
+                BackgroundColor = Color.Black,
+                HorizontalTextAlignment = TextAlignment.Center
+            };
+
+            //Profile Btn
             Button ProfileBtn = new Button
             {
                 Text = "My Profile",
@@ -62,6 +72,7 @@ namespace Snake.Pages
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 Children =
                 {
+                    ActiveUserLbl,
                     ProfileBtn,
                     new BoxView { BackgroundColor = Color.Transparent },
                     PlayBtn,
@@ -70,7 +81,7 @@ namespace Snake.Pages
                 }
             };
 
-            Checking4Users();
+            Checking4Users(ActiveUserLbl);
         }
 
         public async void Nav2ProfilPage(object sender, EventArgs e)
@@ -155,7 +166,7 @@ namespace Snake.Pages
         }
 
         //Checking for Existence of Users
-        public async void Checking4Users()
+        public async void Checking4Users(Label ActiveUserLbl)
         {
             //If Users dont Exist
             if (await App.Database.CheckUsers() == false)
@@ -164,6 +175,11 @@ namespace Snake.Pages
                 await AddMaps();
 
                 Go2ProfilePage();
+            }
+            else {
+                UserModel MyUser = await App.Database.GetActiveUserAsync();
+
+                ActiveUserLbl.Text = "Hello " + MyUser.UserName;
             }
         }
     }
